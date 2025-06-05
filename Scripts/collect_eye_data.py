@@ -37,10 +37,13 @@ def collect_eye_data():
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = frame[y:y + h, x:x + w]
             
-            # Detectar olhos
-            eyes = eye_cascade.detectMultiScale(roi_gray)
+            # Detectar olhos com minNeighbors levemente maior
+            eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=4)
             
             for (ex, ey, ew, eh) in eyes:
+                # Filtrar olhos que estejam muito abaixo (próximos ao nariz)
+                if ey > h * 0.6:
+                    continue
                 eye_img = roi_color[ey:ey + eh, ex:ex + ew]
                 eye_resized = cv2.resize(eye_img, (64, 64))
                 
@@ -62,9 +65,11 @@ def collect_eye_data():
             for (x, y, w, h) in faces:
                 roi_gray = gray[y:y + h, x:x + w]
                 roi_color = frame[y:y + h, x:x + w]
-                eyes = eye_cascade.detectMultiScale(roi_gray)
+                eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=4)
                 
                 for (ex, ey, ew, eh) in eyes:
+                    if ey > h * 0.6:
+                        continue
                     eye_img = roi_color[ey:ey + eh, ex:ex + ew]
                     eye_resized = cv2.resize(eye_img, (64, 64))
                     cv2.imwrite(f'dataset/eyes/open/eye_{open_count}.jpg', eye_resized)
@@ -77,9 +82,11 @@ def collect_eye_data():
             for (x, y, w, h) in faces:
                 roi_gray = gray[y:y + h, x:x + w]
                 roi_color = frame[y:y + h, x:x + w]
-                eyes = eye_cascade.detectMultiScale(roi_gray)
+                eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=4)
                 
                 for (ex, ey, ew, eh) in eyes:
+                    if ey > h * 0.6:
+                        continue
                     eye_img = roi_color[ey:ey + eh, ex:ex + ew]
                     eye_resized = cv2.resize(eye_img, (64, 64))
                     cv2.imwrite(f'dataset/eyes/closed/eye_{closed_count}.jpg', eye_resized)
