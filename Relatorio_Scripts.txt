@@ -1,0 +1,38 @@
+
+# Relatório Técnico - Funções dos Scripts
+
+Este relatório descreve detalhadamente as funcionalidades e responsabilidades de cada script no sistema de detecção de fadiga de motoristas.
+
+## scripts/train_model.py
+
+- Responsável por carregar o dataset de olhos abertos e fechados.
+- Aplica técnicas de aumento de dados com `ImageDataGenerator`.
+- Treina uma rede neural convolucional (CNN) usando Keras e TensorFlow.
+- Salva o modelo treinado em `model_cnn.h5`.
+
+## scripts/eye_extractor.py
+
+- Captura vídeo da webcam em tempo real.
+- Usa `Mediapipe Face Mesh` para detectar o rosto e os marcos faciais.
+- Extrai as regiões dos olhos e as redimensiona para 64x64 pixels.
+- Mostra os olhos recortados ao vivo para inspeção.
+
+## fuzzy/fuzzy_system.py
+
+- Define um sistema fuzzy com três entradas: probabilidade dos olhos estarem abertos (esquerdo e direito) e EAR (Eye Aspect Ratio).
+- Usa `scikit-fuzzy` para criar regras linguísticas e gerar um nível de fadiga (de 0 a 100).
+- Implementa uma função `calcular_nivel_fadiga()` para uso direto nos scripts.
+
+## scripts/real_time_detect.py
+
+- Integra todos os módulos:
+  - Captura da webcam
+  - Detecção facial e extração dos olhos
+  - Predição com o modelo treinado (.h5)
+  - Cálculo do EAR
+  - Avaliação fuzzy do nível de fadiga
+  - Exibição em tela com alertas visuais e sonoros
+
+- Gera alertas com base em faixas de nível de fadiga:
+  - >80: Fadiga crítica
+  - >60: Alerta de fadiga alta
