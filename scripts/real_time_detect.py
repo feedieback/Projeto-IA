@@ -1,4 +1,4 @@
-# real_time_detect.py
+#1 real_time_detect.py
 
 import cv2
 import mediapipe as mp
